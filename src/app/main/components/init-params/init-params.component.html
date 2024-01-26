@@ -1,0 +1,63 @@
+<div class="card bg-dark">
+  <div class="modal-header bg-dark text-light">
+    <h4 class="modal-title">Initial Parameters</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close()"></button>
+  </div>
+  <div class="modal-body bg-dark text-light">
+    <form [formGroup]="paramsForm">
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label for="entryFee" class="form-label">Entry Fee</label>
+          <input type="number" id="entryFee" class="form-control" formControlName="entryFee">
+        </div>
+        <div class="col-6 mb-3">
+          <label for="entryCap" class="form-label">Entry Cap</label>
+          <input type="number" id="entryCap" class="form-control" formControlName="entryCap">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="currentTimeLineIndex" class="form-label">Current Time Line Index</label>
+        <input type="number" id="currentTimeLineIndex" class="form-control" formControlName="currentTimeLineIndex">
+      </div>
+
+      <div formArrayName="timeLine">
+        <div *ngFor="let item of timeLine.controls; let i = index" [formGroupName]="i" class="mb-2">
+<!--          <div class="row">{{item.value.type}}</div>-->
+          <div class="row">
+            <div class="col-4">
+              <label for="dur">Sec</label>
+              <input formControlName="durationSec" id="dur" type="number" class="form-control mb-1"
+                     placeholder="Duration (Seconds)">
+            </div>
+            <ng-container *ngIf="item.value.type === 'blind'">
+              <div class="col-4">
+                <label for="sb">SB</label>
+                <input  formControlName="smallBlind" id="sb" type="number"
+                        class="form-control mb-1" placeholder="Small Blind">
+
+              </div>
+              <div class="col-4">
+                <label for="bb">BB</label>
+                <input formControlName="bigBlind" id="bb" type="number"
+                       class="form-control mb-1" placeholder="Big Blind">
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary" (click)="addBlinds()">Add Blinds</button>
+        <button type="button" class="btn btn-primary" (click)="addBreak()">Add Break</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer bg-dark text-light">
+    <button type="button" class="btn btn-warning" (click)="apply()">Start From Config</button>
+    <button type="button" class="btn btn-danger" (click)="activeModal.dismiss()">Reset</button>
+    <button type="button" class="btn btn-success" (click)="activeModal.close()">Resume</button>
+  </div>
+</div>
+
+

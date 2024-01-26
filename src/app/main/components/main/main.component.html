@@ -1,0 +1,88 @@
+<div class="i-row">
+  <!-- Таймер и блайнды -->
+  <div class="w-50">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="timer">
+          {{pt.leftMinutesAndSeconds.minutes}}:{{pt.leftMinutesAndSeconds.seconds}}
+        </div>
+        <div class="blinds">
+          <span *ngIf="pt.blinds; else break">
+            {{pt.blinds?.bigBlind}}/{{pt.blinds?.smallBlind}}
+          </span>
+          <ng-template #break>
+            Break
+          </ng-template>
+        </div>
+        <div>
+          <button *ngIf="!pt.isRunning" class="btn btn-success start-btn" (click)="pt.startTimer()">Start</button>
+          <button *ngIf="pt.isRunning" class="btn btn-warning start-btn" (click)="pt.stopTimer()">Pause</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Информация о банке -->
+  <div class="w-50">
+    <div class="card bank-info h-100">
+      <div class="card-body">
+        BuyIn: {{pt.buyInCount}} <br>
+        Total: {{pt.totalBank}} <br>
+        BuyIn to +1: {{pt.prizeDistribution[0].buyInsToNextLevel}} <br>
+        <ng-container *ngFor="let prize of pt.prizeDistribution; let i = index">
+          <div>
+            {{i + 1}}. {{prize.percentage * 100}} % - {{pt.totalBank * prize.percentage}}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Список игроков -->
+<div class="i-row">
+  <div class="player-wrapper">
+    <div *ngFor="let player of pt.players; let i = index" class="player">
+      <div class="card">
+        <div class="card-body">
+          <div class="player-name" (dblclick)="pt.removePlayer(i)">
+            <h1>{{player.name}}</h1>
+          </div>
+
+          <div class="player-buy-ins">
+            <div *ngFor="let buyIn of [].constructor(player.buyIns); let j = index" (click)="pt.removeBuyIn(i)"
+                 class="buy-in">{{j + 1}}</div>
+            <button class="btn btn-sm btn-outline-success" (click)="pt.addBuyIn(i)">buy-in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="player">
+      <div class="card">
+        <div class="card-body">
+
+          <button class="btn w-100 btn-outline-light" (click)="pt.addPlayer(mp)">Add player</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #mp let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Player</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="name" class="col-form-label">Name:</label>
+        <input type="text" class="form-control" id="name" #name>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close(name.value)">Save</button>
+  </div>
+</ng-template>
